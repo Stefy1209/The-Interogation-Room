@@ -116,16 +116,43 @@ function showReveal(data) {
   document.getElementById("reveal-modal").classList.remove("hidden");
 }
 
-async function resetCase() {
-  await fetch(`${API_BASE}/reset`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ session_id: sessionId }),
-  });
+function clearBoardUI() {
   document.getElementById("chat-panel").classList.add("hidden");
   document.getElementById("reveal-modal").classList.add("hidden");
   selectedSuspectId = null;
-  await loadClues();
+}
+
+// Replays the SAME case: wipes chat histories + clue board, keeps suspects/solution.
+async function resetCase() {
+  try {
+    const res = await fetch(`${API_BASE}/reset`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: sessionId }),
+    });
+    if (!res.ok) throw new Error(`server said ${res.status}`);
+    clearBoardUI();
+    await loadClues();
+  } catch (err) {
+    alert(`Couldn't restart the case: ${err.message}`);
+  }
+}
+
+// Generates a brand new case (new suspects, new solution) and starts fresh.
+async function startNewGame() {
+  try {
+    const res = await fetch(`${API_BASE}/new-game`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: sessionId }),
+    });
+    if (!res.ok) throw new Error(`server said ${res.status}`);
+    clearBoardUI();
+    await loadCase();
+    await loadClues();
+  } catch (err) {
+    alert(`Couldn't start a new game: ${err.message}`);
+  }
 }
 
 document.getElementById("chat-form").addEventListener("submit", (e) => {
@@ -145,6 +172,7 @@ document.getElementById("accuse-form").addEventListener("submit", (e) => {
 });
 
 document.getElementById("reset-btn").addEventListener("click", resetCase);
+document.getElementById("new-game-btn").addEventListener("click", startNewGame);
 document.getElementById("reveal-close").addEventListener("click", () => {
   document.getElementById("reveal-modal").classList.add("hidden");
 });

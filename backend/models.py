@@ -24,6 +24,7 @@ class Solution(BaseModel):
 class Suspect(BaseModel):
     id: str
     name: str
+    gender: Literal["female", "male"]
     public_persona: str
     alibi: str
     private_knowledge: List[str] = Field(default_factory=list)
