@@ -9,8 +9,10 @@ class SessionState:
     def __init__(self) -> None:
         self.chat_histories: Dict[str, List[dict]] = {}  # suspect_id -> [{role, content}, ...]
         self.claims: List[dict] = []
+        self.contradictions: List[dict] = []
         self.questions_asked: int = 0
         self.next_claim_id: int = 1
+        self.next_contradiction_id: int = 1
 
 
 _sessions: Dict[str, SessionState] = {}

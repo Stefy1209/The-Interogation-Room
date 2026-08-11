@@ -74,8 +74,28 @@ class ClaimsExtraction(BaseModel):
     claims: List[Claim]
 
 
+class Contradiction(BaseModel):
+    id: Optional[str] = None
+    claim_id_a: str
+    claim_id_b: str
+    speaker_a: str
+    speaker_b: str
+    explanation: str
+    created_at: Optional[str] = None
+
+
+class ContradictionCandidate(BaseModel):
+    claim_id_a: str
+    explanation: str
+
+
+class ContradictionsExtraction(BaseModel):
+    contradictions: List[ContradictionCandidate]
+
+
 class ClueBoardResponse(BaseModel):
     claims: List[Claim]
+    contradictions: List[Contradiction] = Field(default_factory=list)
 
 
 # --- Accusation & reveal (owned by A, scoring by D) -------------------------

@@ -18,10 +18,7 @@ def accuse(req: AccuseRequest) -> AccuseResponse:
     session = get_session(req.session_id)
 
     correct = req.accused_id == case.solution.culprit_id
-
-    # Wire this up to B's contradiction detector once it exists (stretch goal);
-    # 0 is a safe default until then.
-    contradictions_found = 0
+    contradictions_found = len(session.contradictions)
 
     score = compute_score(
         questions_asked=session.questions_asked,
