@@ -147,7 +147,7 @@ async function loadClues() {
     card.appendChild(speaker);
     card.appendChild(text);
     board.appendChild(card);
-    makePinDraggable(card, boardPanel);
+    makePinDraggable(card, board, boardPanel);
   }
   renderedClueCount = data.claims.length;
   renderContradictions();
@@ -207,28 +207,42 @@ function drawContradictionLines() {
   });
 }
 
-function makePinDraggable(card, container) {
+// Cards start out laid out by the flex container, so removing one from flow
+// to drag it would normally reflow the rest. Convert every still-in-flow
+// card to a fixed absolute position (matching where it already visually
+// sits) before that happens, so picking one up never moves the others.
+function freezeBoardLayout(board, container) {
+  const containerRect = container.getBoundingClientRect();
+  // Pulling cards out of the flex flow would let the board shrink to fit
+  // whatever's left in flow — lock in its current height first.
+  container.style.minHeight = `${containerRect.height}px`;
+
+  const paddingBoxLeft = containerRect.left + container.clientLeft;
+  const paddingBoxTop = containerRect.top + container.clientTop;
+
+  // Read every still-in-flow card's rect BEFORE changing any of them —
+  // freezing one card reflows the rest, so reading and mutating in the same
+  // pass would capture already-shifted positions for the cards after it.
+  const toFreeze = [...board.querySelectorAll(".claim-card")]
+    .filter((el) => el.style.position !== "absolute")
+    .map((el) => ({ el, rect: el.getBoundingClientRect() }));
+
+  toFreeze.forEach(({ el, rect }) => {
+    el.style.position = "absolute";
+    el.style.left = `${rect.left - paddingBoxLeft}px`;
+    el.style.top = `${rect.top - paddingBoxTop}px`;
+    el.style.margin = "0";
+  });
+}
+
+function makePinDraggable(card, board, container) {
   card.addEventListener("pointerdown", (e) => {
     e.preventDefault();
-    // Absolutely positioned children sit relative to the container's padding
-    // box (inside its border), while getBoundingClientRect() gives the outer
-    // border box — offset by clientLeft/clientTop (the border width) so a
-    // card doesn't jump when the drag starts.
-    const containerRect = container.getBoundingClientRect();
-    const paddingBoxLeft = containerRect.left + container.clientLeft;
-    const paddingBoxTop = containerRect.top + container.clientTop;
-    const cardRect = card.getBoundingClientRect();
-    const startLeft = cardRect.left - paddingBoxLeft;
-    const startTop = cardRect.top - paddingBoxTop;
+    freezeBoardLayout(board, container);
 
-    // Pulling this card out of the flex flow would let the board shrink to
-    // fit the remaining cards — lock in its current height first.
-    container.style.minHeight = `${containerRect.height}px`;
+    const startLeft = parseFloat(card.style.left) || 0;
+    const startTop = parseFloat(card.style.top) || 0;
 
-    card.style.position = "absolute";
-    card.style.left = `${startLeft}px`;
-    card.style.top = `${startTop}px`;
-    card.style.margin = "0";
     card.classList.add("dragging");
     card.setPointerCapture(e.pointerId);
 
