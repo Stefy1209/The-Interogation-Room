@@ -104,7 +104,8 @@ async function sendMessage(message) {
     body: JSON.stringify({ session_id: sessionId, message }),
   });
   const data = await res.json();
-  appendChatLine(data.suspect_id, "suspect", `${data.suspect_id}: ${data.reply}`);
+  const speakerName = suspects.find((s) => s.id === data.suspect_id)?.name || data.suspect_id;
+  appendChatLine(data.suspect_id, "suspect", `${speakerName}: ${data.reply}`);
   if (data.suspect_id === selectedSuspectId) playSpeech(data.suspect_id, data.reply);
   await loadClues();
 }

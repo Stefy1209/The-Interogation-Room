@@ -100,7 +100,8 @@ def extract_claims(suspect_id: str, reply: str) -> ClaimsExtraction:
                 "role": "system",
                 "content": (
                     "Extract factual claims from this suspect's statement as structured "
-                    "data. One claim per distinct fact asserted."
+                    "data. One claim per distinct fact asserted. Extract at most 2 claims "
+                    "total — pick only the most significant ones if more are asserted."
                 ),
             },
             {"role": "user", "content": f"Suspect '{suspect_id}' said: {reply}"},
