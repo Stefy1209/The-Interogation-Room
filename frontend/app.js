@@ -18,6 +18,7 @@ let selectedSuspectId = null;
 let suspects = [];
 
 let renderedClueCount = 0;
+let contradictions = []; // Contradiction[] from the last /api/clues fetch
 const chatLogsBySuspect = {}; // suspect_id -> [{cls, text}, ...], client-side only
 
 async function loadCase() {
@@ -112,12 +113,15 @@ async function sendMessage(message) {
 async function loadClues() {
   const res = await fetch(`${API_BASE}/clues?session_id=${encodeURIComponent(sessionId)}`);
   const data = await res.json();
+  contradictions = data.contradictions || [];
   const board = document.getElementById("clue-board");
   const boardPanel = document.getElementById("clue-board-panel");
 
   if (data.claims.length === 0) {
     board.innerHTML = "<p>No clues pinned yet - ask a suspect something.</p>";
     renderedClueCount = 0;
+    contradictions = [];
+    drawContradictionLines();
     return;
   }
   if (renderedClueCount === 0) board.innerHTML = "";
@@ -129,6 +133,7 @@ async function loadClues() {
     const card = document.createElement("div");
     card.className = "claim-card";
     card.dataset.speakerId = c.speaker_id;
+    card.dataset.claimId = c.id;
 
     const speaker = document.createElement("div");
     speaker.className = "claim-speaker";
@@ -144,6 +149,61 @@ async function loadClues() {
     makePinDraggable(card, boardPanel);
   }
   renderedClueCount = data.claims.length;
+  renderContradictions();
+}
+
+function renderContradictions() {
+  const board = document.getElementById("clue-board");
+  contradictions.forEach((con) => {
+    [con.claim_id_a, con.claim_id_b].forEach((claimId) => {
+      const card = board.querySelector(`[data-claim-id="${CSS.escape(String(claimId))}"]`);
+      if (!card) return; // referenced claim not rendered yet - skip gracefully
+
+      let badge = card.querySelector(".contradiction-badge");
+      if (!badge) {
+        badge = document.createElement("span");
+        badge.className = "contradiction-badge";
+        badge.textContent = "⚠";
+        card.appendChild(badge);
+      }
+      // Recompute the full tooltip every time from the complete contradictions
+      // list so repeated calls stay correct without diffing/dedup logic.
+      badge.title = contradictions
+        .filter((c) => c.claim_id_a === claimId || c.claim_id_b === claimId)
+        .map((c) => c.explanation)
+        .join("\n\n");
+    });
+  });
+  drawContradictionLines();
+}
+
+function drawContradictionLines() {
+  const svg = document.getElementById("contradiction-overlay");
+  const panel = document.getElementById("clue-board-panel");
+  const board = document.getElementById("clue-board");
+  svg.innerHTML = ""; // cheap full redraw each time - avoids diffing
+  if (contradictions.length === 0) return;
+
+  const panelRect = panel.getBoundingClientRect();
+  const originX = panelRect.left + panel.clientLeft;
+  const originY = panelRect.top + panel.clientTop;
+
+  contradictions.forEach((con) => {
+    const cardA = board.querySelector(`[data-claim-id="${CSS.escape(String(con.claim_id_a))}"]`);
+    const cardB = board.querySelector(`[data-claim-id="${CSS.escape(String(con.claim_id_b))}"]`);
+    if (!cardA || !cardB) return; // graceful skip if either claim isn't rendered yet
+
+    const rectA = cardA.getBoundingClientRect();
+    const rectB = cardB.getBoundingClientRect();
+
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", rectA.left + rectA.width / 2 - originX);
+    line.setAttribute("y1", rectA.top + rectA.height / 2 - originY);
+    line.setAttribute("x2", rectB.left + rectB.width / 2 - originX);
+    line.setAttribute("y2", rectB.top + rectB.height / 2 - originY);
+    line.setAttribute("class", "contradiction-line");
+    svg.appendChild(line);
+  });
 }
 
 function makePinDraggable(card, container) {
@@ -188,6 +248,7 @@ function makePinDraggable(card, container) {
       const top = Math.min(Math.max(EDGE_BUFFER, startTop + (ev.clientY - startY)), maxTop);
       card.style.left = `${left}px`;
       card.style.top = `${top}px`;
+      drawContradictionLines();
     }
 
     function onUp(ev) {
@@ -257,6 +318,7 @@ document.getElementById("difficulty-select").addEventListener("change", resetCas
 document.getElementById("reveal-close").addEventListener("click", () => {
   document.getElementById("reveal-modal").classList.add("hidden");
 });
+window.addEventListener("resize", drawContradictionLines);
 
 loadCase();
 loadClues();
