@@ -22,7 +22,6 @@ from models import CaseFile
 
 
 def validate(path: str) -> list:
-    problems = []
     with open(path, encoding="utf-8") as f:
         raw = json.load(f)
 
@@ -30,6 +29,14 @@ def validate(path: str) -> list:
         case = CaseFile(**raw)
     except ValidationError as e:
         return [f"Schema error: {line}" for line in str(e).splitlines()]
+
+    return validate_case(case)
+
+
+def validate_case(case: CaseFile) -> list:
+    """Same checks as validate(), but on an already-parsed CaseFile — no disk I/O.
+    Used by case_generator.py to check a freshly generated case before it's written."""
+    problems = []
 
     culprits = [s for s in case.suspects if s.is_culprit]
     if len(culprits) != 1:
