@@ -12,5 +12,5 @@ router = APIRouter()
 
 @router.post("/reset")
 def reset(req: ResetRequest) -> dict:
-    reset_session(req.session_id)
+    reset_session(req.session_id, req.difficulty)
     return {"status": "ok"}

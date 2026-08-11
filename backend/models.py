@@ -24,6 +24,7 @@ class Solution(BaseModel):
 class Suspect(BaseModel):
     id: str
     name: str
+    gender: Literal["male", "female"]
     public_persona: str
     alibi: str
     private_knowledge: List[str] = Field(default_factory=list)
@@ -123,3 +124,4 @@ class AccuseResponse(BaseModel):
 
 class ResetRequest(BaseModel):
     session_id: str
+    difficulty: Literal["easy", "medium", "hard"] = "medium"

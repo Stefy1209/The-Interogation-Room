@@ -6,13 +6,14 @@ from typing import Dict, List
 
 
 class SessionState:
-    def __init__(self) -> None:
+    def __init__(self, difficulty: str = "medium") -> None:
         self.chat_histories: Dict[str, List[dict]] = {}  # suspect_id -> [{role, content}, ...]
         self.claims: List[dict] = []
         self.contradictions: List[dict] = []
         self.questions_asked: int = 0
         self.next_claim_id: int = 1
         self.next_contradiction_id: int = 1
+        self.difficulty: str = difficulty
 
 
 _sessions: Dict[str, SessionState] = {}
@@ -24,8 +25,8 @@ def get_session(session_id: str) -> SessionState:
     return _sessions[session_id]
 
 
-def reset_session(session_id: str) -> None:
-    _sessions[session_id] = SessionState()
+def reset_session(session_id: str, difficulty: str = "medium") -> None:
+    _sessions[session_id] = SessionState(difficulty=difficulty)
 
 
 def reset_all() -> None:
