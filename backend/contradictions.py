@@ -66,6 +66,8 @@ def _significant_tokens(text: str) -> set[str]:
 
 def _mock_detect(new_claim: Claim, prior_claims: list[dict]) -> list[Contradiction]:
     suspects_by_id = {s.id: s for s in case_loader.CASE.suspects}
+    new_speaker = suspects_by_id.get(new_claim.speaker_id)
+    new_speaker_name = new_speaker.name if new_speaker else new_claim.speaker_id
     new_lower = new_claim.statement.lower()
     new_tokens = _significant_tokens(new_claim.statement)
     results = []
@@ -90,7 +92,7 @@ def _mock_detect(new_claim: Claim, prior_claims: list[dict]) -> list[Contradicti
                     speaker_a=prior["speaker_id"],
                     speaker_b=new_claim.speaker_id,
                     explanation=(
-                        f"{new_claim.speaker_id} mentions {prior_speaker.name}, but their "
+                        f"{new_speaker_name} mentions {prior_speaker.name}, but their "
                         f"account shares no common detail with {prior_speaker.name}'s own "
                         "statement — possible conflicting whereabouts."
                     ),
@@ -103,8 +105,14 @@ def _llm_detect(new_claim: Claim, prior_claims: list[dict]) -> list[Contradictio
     from openai import OpenAI
 
     client = OpenAI()
+    suspects_by_id = {s.id: s for s in case_loader.CASE.suspects}
+
+    def _name(speaker_id: str) -> str:
+        speaker = suspects_by_id.get(speaker_id)
+        return speaker.name if speaker else speaker_id
+
     prior_text = "\n".join(
-        f"[{c['id']}] {c['speaker_id']}: {c['statement']}" for c in prior_claims
+        f"[{c['id']}] {_name(c['speaker_id'])}: {c['statement']}" for c in prior_claims
     )
     response = client.chat.completions.create(
         model="gpt-4o",
@@ -123,7 +131,7 @@ def _llm_detect(new_claim: Claim, prior_claims: list[dict]) -> list[Contradictio
             {
                 "role": "user",
                 "content": (
-                    f"New claim [{new_claim.id}] from {new_claim.speaker_id}: "
+                    f"New claim [{new_claim.id}] from {_name(new_claim.speaker_id)}: "
                     f"{new_claim.statement}\n\nPrior claims:\n{prior_text}"
                 ),
             },
