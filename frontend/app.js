@@ -16,6 +16,7 @@ function getSessionId() {
 let sessionId = getSessionId();
 let selectedSuspectId = null;
 let suspects = [];
+const chatLogsBySuspect = {}; // suspect_id -> [{cls, text}, ...], client-side only
 
 async function loadCase() {
   const res = await fetch(`${API_BASE}/case`);
@@ -53,10 +54,14 @@ function selectSuspect(id, name) {
   });
   document.getElementById("chat-panel").classList.remove("hidden");
   document.getElementById("chat-suspect-name").textContent = `Interrogating: ${name}`;
-  document.getElementById("chat-log").innerHTML = "";
+
+  const log = document.getElementById("chat-log");
+  log.innerHTML = "";
+  (chatLogsBySuspect[id] || []).forEach(({ cls, text }) => renderChatLine(cls, text));
+  log.scrollTop = log.scrollHeight;
 }
 
-function appendChatLine(cls, text) {
+function renderChatLine(cls, text) {
   const log = document.getElementById("chat-log");
   const line = document.createElement("div");
   line.className = `chat-msg ${cls}`;
@@ -65,17 +70,40 @@ function appendChatLine(cls, text) {
   log.scrollTop = log.scrollHeight;
 }
 
+function appendChatLine(suspectId, cls, text) {
+  if (!chatLogsBySuspect[suspectId]) chatLogsBySuspect[suspectId] = [];
+  chatLogsBySuspect[suspectId].push({ cls, text });
+  if (suspectId === selectedSuspectId) renderChatLine(cls, text);
+}
+
+async function playSpeech(suspectId, text) {
+  try {
+    const res = await fetch(`${API_BASE}/suspects/${suspectId}/speech`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    if (!res.ok) return; // best-effort — a TTS failure shouldn't break the chat
+    const blob = await res.blob();
+    new Audio(URL.createObjectURL(blob)).play();
+  } catch (e) {
+    console.error("TTS playback failed", e);
+  }
+}
+
 async function sendMessage(message) {
   if (!selectedSuspectId) return;
-  appendChatLine("player", `You: ${message}`);
+  const askedSuspectId = selectedSuspectId;
+  appendChatLine(askedSuspectId, "player", `You: ${message}`);
 
-  const res = await fetch(`${API_BASE}/suspects/${selectedSuspectId}/chat`, {
+  const res = await fetch(`${API_BASE}/suspects/${askedSuspectId}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ session_id: sessionId, message }),
   });
   const data = await res.json();
-  appendChatLine("suspect", `${data.suspect_id}: ${data.reply}`);
+  appendChatLine(data.suspect_id, "suspect", `${data.suspect_id}: ${data.reply}`);
+  if (data.suspect_id === selectedSuspectId) playSpeech(data.suspect_id, data.reply);
   await loadClues();
 }
 
@@ -117,11 +145,13 @@ function showReveal(data) {
 }
 
 async function resetCase() {
+  const difficulty = document.getElementById("difficulty-select").value;
   await fetch(`${API_BASE}/reset`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ session_id: sessionId }),
+    body: JSON.stringify({ session_id: sessionId, difficulty }),
   });
+  Object.keys(chatLogsBySuspect).forEach((id) => delete chatLogsBySuspect[id]);
   document.getElementById("chat-panel").classList.add("hidden");
   document.getElementById("reveal-modal").classList.add("hidden");
   selectedSuspectId = null;
@@ -145,6 +175,7 @@ document.getElementById("accuse-form").addEventListener("submit", (e) => {
 });
 
 document.getElementById("reset-btn").addEventListener("click", resetCase);
+document.getElementById("difficulty-select").addEventListener("change", resetCase);
 document.getElementById("reveal-close").addEventListener("click", () => {
   document.getElementById("reveal-modal").classList.add("hidden");
 });

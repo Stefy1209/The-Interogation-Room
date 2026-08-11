@@ -26,6 +26,7 @@
     {
       "id": "suspect_1",
       "name": "Alex Chen",
+      "gender": "female",
       "public_persona": "The event organizer. Meticulous, a little anxious, talks fast when stressed, feels personally responsible for the mistake.",
       "alibi": "Set up the table at 9am, did a headcount at 10:30 that only covered intern bags, then got pulled into meetings until finding the VIP bag missing at 4pm.",
       "private_knowledge": [
@@ -44,6 +45,7 @@
     {
       "id": "suspect_2",
       "name": "Priya Patel",
+      "gender": "female",
       "public_persona": "A new intern. Cheerful, chatty, a bit nervous under direct questioning, avoids eye contact when uncomfortable.",
       "alibi": "Claims she was at her desk all Monday afternoon and didn't go near the storage closet.",
       "private_knowledge": [
@@ -63,6 +65,7 @@
     {
       "id": "suspect_3",
       "name": "Marcus Webb",
+      "gender": "male",
       "public_persona": "Facilities/office manager. Gruff, plain-spoken, mildly annoyed at being questioned about 'a bag', but honest.",
       "alibi": "Was clearing and resetting the welcome area around 11am and moved a leftover box of bags into the storage closet to free up table space.",
       "private_knowledge": [
@@ -81,6 +84,7 @@
     {
       "id": "suspect_4",
       "name": "Jordan Lee",
+      "gender": "male",
       "public_persona": "Another new intern. Laid-back, easygoing, not great with exact times, friendly with everyone.",
       "alibi": "Was around the office most of Monday afternoon, doesn't remember anything unusual.",
       "private_knowledge": [
