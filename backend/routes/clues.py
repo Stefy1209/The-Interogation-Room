@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, Query
 
+from contradictions import detect_contradictions
 from models import Claim, ClaimsExtraction, ClueBoardResponse
 from state import get_session
 
@@ -57,7 +58,7 @@ CLAIM_SCHEMA = {
 @router.get("/clues", response_model=ClueBoardResponse)
 def get_clues(session_id: str = Query(...)) -> ClueBoardResponse:
     session = get_session(session_id)
-    return ClueBoardResponse(claims=session.claims)
+    return ClueBoardResponse(claims=session.claims, contradictions=session.contradictions)
 
 
 def record_claims_from_reply(session_id: str, suspect_id: str, reply: str, turn_index: int) -> None:
@@ -70,7 +71,18 @@ def record_claims_from_reply(session_id: str, suspect_id: str, reply: str, turn_
         session.next_claim_id += 1
         claim.turn_index = turn_index
         claim.created_at = datetime.now(timezone.utc).isoformat()
+
+        prior_claims = [c for c in session.claims if c["speaker_id"] != claim.speaker_id]
         session.claims.append(claim.model_dump())
+
+        existing_pairs = {(c["claim_id_a"], c["claim_id_b"]) for c in session.contradictions}
+        for contradiction in detect_contradictions(claim, prior_claims):
+            if (contradiction.claim_id_a, contradiction.claim_id_b) in existing_pairs:
+                continue
+            contradiction.id = f"x{session.next_contradiction_id}"
+            session.next_contradiction_id += 1
+            contradiction.created_at = datetime.now(timezone.utc).isoformat()
+            session.contradictions.append(contradiction.model_dump())
 
 
 def _mock_extraction(suspect_id: str, reply: str) -> ClaimsExtraction:

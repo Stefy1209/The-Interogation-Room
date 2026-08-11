@@ -64,6 +64,9 @@ def run() -> None:
     print("=== Clue board ===")
     print(json.dumps(clues.json(), indent=2))
 
+    print("=== Contradictions ===")
+    print(json.dumps(clues.json().get("contradictions", []), indent=2))
+
 
 if __name__ == "__main__":
     try:
