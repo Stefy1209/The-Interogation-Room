@@ -10,11 +10,15 @@ frontend from a different port during development.
 """
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from routes import accusation, case as case_routes, clues, session as session_routes, suspects
+from routes import accusation, case as case_routes, clues, session as session_routes, speech, suspects
 
 app = FastAPI(title="The Interrogation Room")
 
@@ -30,6 +34,7 @@ app.include_router(suspects.router, prefix="/api")
 app.include_router(clues.router, prefix="/api")
 app.include_router(accusation.router, prefix="/api")
 app.include_router(session_routes.router, prefix="/api")
+app.include_router(speech.router, prefix="/api")
 
 _frontend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend")
 app.mount("/", StaticFiles(directory=_frontend_dir, html=True), name="frontend")
