@@ -119,7 +119,8 @@ async function loadClues() {
   const boardPanel = document.getElementById("clue-board-panel");
 
   if (data.claims.length === 0) {
-    board.innerHTML = "<p>No clues pinned yet - ask a suspect something.</p>";
+    //board.innerHTML = "<p>No clues pinned yet - ask a suspect something.</p>";
+    board.innerHTML = "";
     renderedClueCount = 0;
     contradictions = [];
     drawContradictionLines();
