@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Interrogation Room</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>The Interrogation Room</h1>
+    <p id="case-title">Loading case…</p>
+    <button id="reset-btn">Reset case</button>
+  </header>
+
+  <main>
+    <section id="suspects-panel">
+      <h2>Suspects</h2>
+      <div id="suspect-cards"></div>
+
+      <div id="chat-panel" class="hidden">
+        <h3 id="chat-suspect-name"></h3>
+        <div id="chat-log"></div>
+        <form id="chat-form">
+          <input id="chat-input" type="text" placeholder="Ask a question…" autocomplete="off" />
+          <button type="submit">Ask</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="clue-board-panel">
+      <h2>Clue board</h2>
+      <div id="clue-board"></div>
+    </section>
+
+    <section id="accusation-panel">
+      <h2>Make an accusation</h2>
+      <form id="accuse-form">
+        <label>
+          Who did it?
+          <select id="accuse-select"></select>
+        </label>
+        <label>
+          Motive guess
+          <input id="motive-input" type="text" placeholder="Why did they do it?" />
+        </label>
+        <button type="submit">Accuse</button>
+      </form>
+    </section>
+  </main>
+
+  <div id="reveal-modal" class="hidden">
+    <div id="reveal-content">
+      <h2 id="reveal-verdict"></h2>
+      <p id="reveal-story"></p>
+      <p id="reveal-score"></p>
+      <button id="reveal-close">Close</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  margin: 0;
+  background: #14131c;
+  color: #eee7f5;
+}
+
+header {
+  padding: 1.5rem 2rem;
+  background: #1f1d2b;
+  border-bottom: 1px solid #322f42;
+}
+
+header h1 {
+  margin: 0 0 0.25rem 0;
+}
+
+#reset-btn {
+  margin-top: 0.75rem;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+}
+
+section {
+  background: #1f1d2b;
+  border: 1px solid #322f42;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+#accusation-panel {
+  grid-column: 1 / -1;
+}
+
+.suspect-card {
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  margin: 0 0.5rem 0.5rem 0;
+  border: 1px solid #4b4665;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #262436;
+}
+
+.suspect-card.selected {
+  border-color: #a988ff;
+  background: #33304a;
+}
+
+#chat-log {
+  height: 260px;
+  overflow-y: auto;
+  border: 1px solid #322f42;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin: 0.75rem 0;
+  background: #14131c;
+}
+
+.chat-msg { margin-bottom: 0.5rem; }
+.chat-msg.player { color: #a3d9ff; }
+.chat-msg.suspect { color: #ffd9a3; }
+
+#chat-form, #accuse-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+#chat-input, #motive-input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #4b4665;
+  background: #14131c;
+  color: #eee7f5;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  background: #a988ff;
+  color: #14131c;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.claim-card {
+  border: 1px solid #322f42;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  background: #14131c;
+  font-size: 0.9rem;
+}
+
+.hidden { display: none !important; }
+
+#reveal-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#reveal-content {
+  background: #1f1d2b;
+  border: 1px solid #4b4665;
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 500px;
+}
