@@ -222,24 +222,21 @@ function showReveal(data) {
   document.getElementById("reveal-modal").classList.remove("hidden");
 }
 
-<<<<<<< HEAD
-function clearBoardUI() {
-=======
-async function resetCase() {
-  const difficulty = document.getElementById("difficulty-select").value;
-  await fetch(`${API_BASE}/reset`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ session_id: sessionId, difficulty }),
-  });
-  Object.keys(chatLogsBySuspect).forEach((id) => delete chatLogsBySuspect[id]);
->>>>>>> origin/main
-  document.getElementById("chat-panel").classList.add("hidden");
-  document.getElementById("reveal-modal").classList.add("hidden");
-  selectedSuspectId = null;
-}
+// function clearBoardUI() {
+// async function resetCase() {
+//   const difficulty = document.getElementById("difficulty-select").value;
+//   await fetch(`${API_BASE}/reset`, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ session_id: sessionId, difficulty }),
+//   });
+//   Object.keys(chatLogsBySuspect).forEach((id) => delete chatLogsBySuspect[id]);
+//   document.getElementById("chat-panel").classList.add("hidden");
+//   document.getElementById("reveal-modal").classList.add("hidden");
+//   selectedSuspectId = null;
+// }
 
-// Replays the SAME case: wipes chat histories + clue board, keeps suspects/solution.
+///Replays the SAME case: wipes chat histories + clue board, keeps suspects/solution.
 async function resetCase() {
   try {
     const res = await fetch(`${API_BASE}/reset`, {
@@ -289,11 +286,8 @@ document.getElementById("accuse-form").addEventListener("submit", (e) => {
 });
 
 document.getElementById("reset-btn").addEventListener("click", resetCase);
-<<<<<<< HEAD
 document.getElementById("new-game-btn").addEventListener("click", startNewGame);
-=======
 document.getElementById("difficulty-select").addEventListener("change", resetCase);
->>>>>>> origin/main
 document.getElementById("reveal-close").addEventListener("click", () => {
   document.getElementById("reveal-modal").classList.add("hidden");
 });
