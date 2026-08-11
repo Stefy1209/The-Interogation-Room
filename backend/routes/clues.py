@@ -94,7 +94,7 @@ def extract_claims(suspect_id: str, reply: str) -> ClaimsExtraction:
 
     client = OpenAI()
     response = client.chat.completions.create(
-        model="gpt-5-mini",
+        model="gpt-4o",
         messages=[
             {
                 "role": "system",

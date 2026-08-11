@@ -58,7 +58,7 @@ def _call_openai(suspect, case, history) -> str:
     system_prompt = build_system_prompt(suspect, case)
     messages = [{"role": "system", "content": system_prompt}] + history
     response = client.chat.completions.create(
-        model="gpt-5" if suspect.is_culprit else "gpt-5-mini",
+        model="gpt-4o",
         messages=messages,
     )
     return response.choices[0].message.content
