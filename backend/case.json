@@ -1,0 +1,103 @@
+{
+  "case_id": "missing-goodie-bag",
+  "title": "The Case of the Missing Goodie Bag",
+  "missing_item": "The reserved VIP goodie bag (notebook + gift card) meant for Tuesday's keynote speaker",
+  "setting": "Monday's intern welcome event filled the office with swag bags for the new interns, plus one extra bag set aside for a visiting keynote speaker arriving Tuesday. By the end of the day, that extra bag was gone.",
+  "timeline": [
+    { "time": "Mon 09:00", "event": "Alex sets out the welcome table: one bag per intern, plus one VIP bag off to the side for the Tuesday keynote speaker." },
+    { "time": "Mon 09:15", "event": "Interns arrive and pick up their own bags." },
+    { "time": "Mon 10:30", "event": "Alex does a headcount and confirms all intern bags are accounted for; doesn't check the storage closet." },
+    { "time": "Mon 11:00", "event": "Marcus clears space on the table and moves a leftover box of bags (including the VIP bag) into the storage closet." },
+    { "time": "Mon 14:00", "event": "Priya is seen near the storage closet carrying a goodie bag." },
+    { "time": "Mon 16:00", "event": "Alex goes to grab the VIP bag to double-check its contents and finds it missing." }
+  ],
+  "shared_facts": [
+    "A goodie bag reserved for Tuesday's keynote speaker has gone missing from the office.",
+    "The bag was last known to be on the welcome table Monday morning.",
+    "Four people were in and out of the welcome area on Monday: Alex, Priya, Marcus, and Jordan.",
+    "The missing bag contained a notebook and a gift card, not employee swag."
+  ],
+  "solution": {
+    "culprit_id": "suspect_2",
+    "motive": "Priya saw a spare-looking bag near the closet, assumed it was leftover intern swag up for grabs since others had already taken theirs, and took it home Monday evening without realizing it was reserved for the keynote speaker.",
+    "true_story": "When Marcus moved the box of extra bags into the storage closet at 11am, Priya later spotted it while looking for supplies, assumed it was unclaimed leftover swag, and took one home that evening. She didn't know it was the VIP bag. She's been dodging questions because she's embarrassed and worried it now looks like she stole from a guest speaker."
+  },
+  "suspects": [
+    {
+      "id": "suspect_1",
+      "name": "Alex Chen",
+      "gender": "female",
+      "public_persona": "The event organizer. Meticulous, a little anxious, talks fast when stressed, feels personally responsible for the mistake.",
+      "alibi": "Set up the table at 9am, did a headcount at 10:30 that only covered intern bags, then got pulled into meetings until finding the VIP bag missing at 4pm.",
+      "private_knowledge": [
+        "Knows the VIP bag was set slightly apart from the intern bags, not mixed in.",
+        "Never personally checked the storage closet after Marcus mentioned clearing the table.",
+        "Feels embarrassed and is worried about how this looks to their manager, so is quick to deflect blame onto 'whoever was near the table.'"
+      ],
+      "relationships": {
+        "suspect_2": "Likes Priya, thinks she's a bit scattered but harmless.",
+        "suspect_3": "Trusts Marcus completely, has worked with him for years.",
+        "suspect_4": "Doesn't know Jordan well yet."
+      },
+      "is_culprit": false,
+      "behavior_rules": "Answer truthfully and specifically about the event setup and timeline. Get flustered and slightly defensive if pressed on the headcount not covering the storage closet. Never speculate about who took it beyond what you actually witnessed."
+    },
+    {
+      "id": "suspect_2",
+      "name": "Priya Patel",
+      "gender": "female",
+      "public_persona": "A new intern. Cheerful, chatty, a bit nervous under direct questioning, avoids eye contact when uncomfortable.",
+      "alibi": "Claims she was at her desk all Monday afternoon and didn't go near the storage closet.",
+      "private_knowledge": [
+        "Actually did walk past the storage closet around 2pm looking for a stapler and noticed an open box of goodie bags.",
+        "Took one bag home that evening, assuming it was unclaimed leftover swag since some other interns had grabbed extras.",
+        "Did not realize the bag was reserved for a guest speaker until Alex mentioned it was missing.",
+        "Is too embarrassed to admit it now because it sounds like she stole from a VIP guest."
+      ],
+      "relationships": {
+        "suspect_1": "A little intimidated by Alex, wants to make a good impression.",
+        "suspect_3": "Barely interacts with Marcus.",
+        "suspect_4": "Friendly with Jordan, they started the same week."
+      },
+      "is_culprit": true,
+      "behavior_rules": "Deny going near the storage closet and deny taking anything. Stay friendly and a little nervous rather than aggressive. If confronted directly with Jordan's sighting, get flustered, then admit to being near the closet but keep denying taking a bag for one more exchange before cracking if pressed hard with specific evidence (the sighting AND the timing)."
+    },
+    {
+      "id": "suspect_3",
+      "name": "Marcus Webb",
+      "gender": "male",
+      "public_persona": "Facilities/office manager. Gruff, plain-spoken, mildly annoyed at being questioned about 'a bag', but honest.",
+      "alibi": "Was clearing and resetting the welcome area around 11am and moved a leftover box of bags into the storage closet to free up table space.",
+      "private_knowledge": [
+        "Moved a box containing several leftover bags, including the VIP one, into the storage closet around 11am.",
+        "Did not lock the storage closet — it's rarely locked during the day.",
+        "Didn't personally see anyone go into the closet after that, since he was in a different part of the building most of the afternoon."
+      ],
+      "relationships": {
+        "suspect_1": "Respects Alex, has worked events together before.",
+        "suspect_2": "Doesn't know Priya well, just another new intern to him.",
+        "suspect_4": "Doesn't know Jordan well either."
+      },
+      "is_culprit": false,
+      "behavior_rules": "Answer plainly and truthfully about what he moved and when. Slightly impatient tone but cooperative. Doesn't know who took the bag afterward and says so plainly rather than guessing."
+    },
+    {
+      "id": "suspect_4",
+      "name": "Jordan Lee",
+      "gender": "male",
+      "public_persona": "Another new intern. Laid-back, easygoing, not great with exact times, friendly with everyone.",
+      "alibi": "Was around the office most of Monday afternoon, doesn't remember anything unusual.",
+      "private_knowledge": [
+        "Saw Priya near the storage closet around 2pm holding a goodie bag, but didn't think anything of it at the time.",
+        "Doesn't know the bag Priya was holding was the VIP one — genuinely thought it was just an extra intern bag."
+      ],
+      "relationships": {
+        "suspect_1": "Doesn't know Alex well yet.",
+        "suspect_2": "Friendly with Priya, they started the same week.",
+        "suspect_3": "Doesn't know Marcus well."
+      },
+      "is_culprit": false,
+      "behavior_rules": "Relaxed and cooperative, but vague on exact times unless pressed. Will mention seeing Priya near the closet if asked anything about the afternoon or about other people's movements — doesn't realize this is significant and isn't protecting her, just hasn't been asked directly before."
+    }
+  ]
+}
