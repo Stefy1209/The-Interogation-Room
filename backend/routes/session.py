@@ -20,7 +20,7 @@ USE_MOCK = os.getenv("USE_MOCK", "true").lower() == "true"
 
 @router.post("/reset")
 def reset(req: ResetRequest) -> dict:
-    reset_session(req.session_id, req.difficulty)
+    reset_session(req.session_id)
     return {"status": "ok"}
 
 
@@ -28,5 +28,5 @@ def reset(req: ResetRequest) -> dict:
 def new_game(req: ResetRequest) -> dict:
     new_case = generate_case(use_mock=USE_MOCK)
     case_loader.reload_case(new_case)
-    reset_session(req.session_id)
+    reset_session(req.session_id, req.difficulty)
     return {"status": "ok"}

@@ -222,21 +222,14 @@ function showReveal(data) {
   document.getElementById("reveal-modal").classList.remove("hidden");
 }
 
-// function clearBoardUI() {
-// async function resetCase() {
-//   const difficulty = document.getElementById("difficulty-select").value;
-//   await fetch(`${API_BASE}/reset`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({ session_id: sessionId, difficulty }),
-//   });
-//   Object.keys(chatLogsBySuspect).forEach((id) => delete chatLogsBySuspect[id]);
-//   document.getElementById("chat-panel").classList.add("hidden");
-//   document.getElementById("reveal-modal").classList.add("hidden");
-//   selectedSuspectId = null;
-// }
+function clearBoardUI() {
+  Object.keys(chatLogsBySuspect).forEach((id) => delete chatLogsBySuspect[id]);
+  document.getElementById("chat-panel").classList.add("hidden");
+  document.getElementById("reveal-modal").classList.add("hidden");
+  selectedSuspectId = null;
+}
 
-///Replays the SAME case: wipes chat histories + clue board, keeps suspects/solution.
+// Replays the SAME case at default difficulty: wipes chat histories + clue board, keeps suspects/solution.
 async function resetCase() {
   try {
     const res = await fetch(`${API_BASE}/reset`, {
@@ -252,13 +245,15 @@ async function resetCase() {
   }
 }
 
-// Generates a brand new case (new suspects, new solution) and starts fresh.
+// Generates a brand new case (new suspects, new solution) at the selected
+// difficulty (controls how hard suspects are to crack) and starts fresh.
 async function startNewGame() {
   try {
+    const difficulty = document.getElementById("difficulty-select").value;
     const res = await fetch(`${API_BASE}/new-game`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ session_id: sessionId }),
+      body: JSON.stringify({ session_id: sessionId, difficulty }),
     });
     if (!res.ok) throw new Error(`server said ${res.status}`);
     clearBoardUI();
@@ -287,7 +282,6 @@ document.getElementById("accuse-form").addEventListener("submit", (e) => {
 
 document.getElementById("reset-btn").addEventListener("click", resetCase);
 document.getElementById("new-game-btn").addEventListener("click", startNewGame);
-document.getElementById("difficulty-select").addEventListener("change", resetCase);
 document.getElementById("reveal-close").addEventListener("click", () => {
   document.getElementById("reveal-modal").classList.add("hidden");
 });
