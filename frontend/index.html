@@ -10,7 +10,7 @@
   <header>
     <h1>The Interrogation Room</h1>
     <p id="case-title">Loading case…</p>
-    <label>
+    <label class="difficulty-control">
       New game difficulty
       <select id="difficulty-select">
         <option value="easy">Easy</option>
@@ -18,8 +18,10 @@
         <option value="hard">Hard</option>
       </select>
     </label>
-    <button id="new-game-btn">New game</button>
-    <button id="reset-btn">Restart this case</button>
+    <div class="header-actions">
+      <button id="new-game-btn">New game</button>
+      <button id="reset-btn">Restart this case</button>
+    </div>
   </header>
 
   <main>
