@@ -44,10 +44,17 @@
   "suspects": [
     {
       "id": "suspect_1",
+<<<<<<< HEAD
       "name": "Mark Liu",
       "gender": "male",
       "public_persona": "Desktop support specialist; meticulous, often jokes about keeping things 'by the book'.",
       "alibi": "At my desk the whole morning fixing a network issue; I stepped away only to grab a sandwich at 11:30.",
+=======
+      "name": "Alex Chen",
+      "gender": "female",
+      "public_persona": "The event organizer. Meticulous, a little anxious, talks fast when stressed, feels personally responsible for the mistake.",
+      "alibi": "Set up the table at 9am, did a headcount at 10:30 that only covered intern bags, then got pulled into meetings until finding the VIP bag missing at 4pm.",
+>>>>>>> origin/main
       "private_knowledge": [
         "Around 09:35 I saw Riya Patel (suspect_3) near the plant carrying a small watering can.",
         "I noticed damp footprints leading away from the kitchenette toward the copy room around 09:50."
@@ -62,10 +69,17 @@
     },
     {
       "id": "suspect_2",
+<<<<<<< HEAD
       "name": "Olivia Park",
       "gender": "female",
       "public_persona": "HR coordinator; organized and approachable, often mediates small disputes.",
       "alibi": "In HR calls from 09:00–09:50, then briefly in the kitchenette at about 10:05 getting coffee.",
+=======
+      "name": "Priya Patel",
+      "gender": "female",
+      "public_persona": "A new intern. Cheerful, chatty, a bit nervous under direct questioning, avoids eye contact when uncomfortable.",
+      "alibi": "Claims she was at her desk all Monday afternoon and didn't go near the storage closet.",
+>>>>>>> origin/main
       "private_knowledge": [
         "I saw fresh soil smudges on the floor near the kitchenette when I walked through at 10:05.",
         "I noticed the ficus was not in its spot when I went by to make coffee."
@@ -80,10 +94,17 @@
     },
     {
       "id": "suspect_3",
+<<<<<<< HEAD
       "name": "Riya Patel",
       "gender": "female",
       "public_persona": "Graphic designer who keeps several small plants on her desk; friendly but private about mistakes.",
       "alibi": "I was at my workstation working on a tight deadline. I handled the ficus this morning because it looked droopy.",
+=======
+      "name": "Marcus Webb",
+      "gender": "male",
+      "public_persona": "Facilities/office manager. Gruff, plain-spoken, mildly annoyed at being questioned about 'a bag', but honest.",
+      "alibi": "Was clearing and resetting the welcome area around 11am and moved a leftover box of bags into the storage closet to free up table space.",
+>>>>>>> origin/main
       "private_knowledge": [
         "I tried to revive a sad-looking leaf and overwatered the ficus around 09:40; the pot slipped and cracked.",
         "I moved the plant behind the copy room because I panicked and didn't want my mistake to interrupt the office."
@@ -98,10 +119,17 @@
     },
     {
       "id": "suspect_4",
+<<<<<<< HEAD
       "name": "Ethan Brooks",
       "gender": "male",
       "public_persona": "Sales lead; outgoing and often in and out for client visits.",
       "alibi": "I left the office briefly at 09:30 to drop off a package and returned by 09:55; I was on calls after 10:00.",
+=======
+      "name": "Jordan Lee",
+      "gender": "male",
+      "public_persona": "Another new intern. Laid-back, easygoing, not great with exact times, friendly with everyone.",
+      "alibi": "Was around the office most of Monday afternoon, doesn't remember anything unusual.",
+>>>>>>> origin/main
       "private_knowledge": [
         "When I returned around 09:55 I noticed the plant area looked disturbed and there was damp soil trailing toward the copy room.",
         "Riya usually waters that plant; I've seen her doing it several times."
