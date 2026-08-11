@@ -79,6 +79,24 @@ function appendChatLine(suspectId, cls, text) {
   if (suspectId === selectedSuspectId) renderChatLine(cls, text);
 }
 
+// Transient "typing…" placeholder — not saved to chatLogsBySuspect since
+// it isn't real chat history, just a wait cue while the reply is in flight.
+function showTypingIndicator(suspectId) {
+  if (suspectId !== selectedSuspectId || document.getElementById("typing-indicator")) return;
+  const log = document.getElementById("chat-log");
+  const line = document.createElement("div");
+  line.id = "typing-indicator";
+  line.className = "chat-msg suspect typing";
+  const name = suspects.find((s) => s.id === suspectId)?.name || suspectId;
+  line.textContent = `${name} is typing…`;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+function hideTypingIndicator() {
+  document.getElementById("typing-indicator")?.remove();
+}
+
 async function playSpeech(suspectId, text) {
   try {
     const res = await fetch(`${API_BASE}/suspects/${suspectId}/speech`, {
@@ -98,17 +116,23 @@ async function sendMessage(message) {
   if (!selectedSuspectId) return;
   const askedSuspectId = selectedSuspectId;
   appendChatLine(askedSuspectId, "player", `You: ${message}`);
+  showTypingIndicator(askedSuspectId);
 
-  const res = await fetch(`${API_BASE}/suspects/${askedSuspectId}/chat`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ session_id: sessionId, message }),
-  });
-  const data = await res.json();
-  const speakerName = suspects.find((s) => s.id === data.suspect_id)?.name || data.suspect_id;
-  appendChatLine(data.suspect_id, "suspect", `${speakerName}: ${data.reply}`);
-  if (data.suspect_id === selectedSuspectId) playSpeech(data.suspect_id, data.reply);
-  await loadClues();
+  try {
+    const res = await fetch(`${API_BASE}/suspects/${askedSuspectId}/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: sessionId, message }),
+    });
+    const data = await res.json();
+    const speakerName = suspects.find((s) => s.id === data.suspect_id)?.name || data.suspect_id;
+    hideTypingIndicator();
+    appendChatLine(data.suspect_id, "suspect", `${speakerName}: ${data.reply}`);
+    if (data.suspect_id === selectedSuspectId) playSpeech(data.suspect_id, data.reply);
+    await loadClues();
+  } finally {
+    hideTypingIndicator();
+  }
 }
 
 async function loadClues() {

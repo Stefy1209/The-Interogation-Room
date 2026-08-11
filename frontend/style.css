@@ -230,6 +230,7 @@ section > h2 {
     var(--paper-grain),
     repeating-linear-gradient(180deg, transparent 0, transparent 27px, rgba(43,33,22,0.18) 28px);
   background-color: var(--paper-dark);
+  background-position: 0 0, 0 7px;
   border: 1px solid rgba(0,0,0,0.15);
   border-radius: 3px;
   font-family: "Courier New", Courier, monospace;
@@ -239,6 +240,17 @@ section > h2 {
 .chat-msg { margin-bottom: 0; }
 .chat-msg.player { color: #1a5276; font-weight: 600; }
 .chat-msg.suspect { color: #7a2e14; }
+
+.chat-msg.typing {
+  font-style: italic;
+  opacity: 0.7;
+  animation: typing-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes typing-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.85; }
+}
 
 #chat-form, #accuse-form {
   display: flex;
